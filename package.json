@@ -1,0 +1,72 @@
+{
+	"name": "@bitavu/n8n-nodes-bitavu",
+	"version": "0.1.1",
+	"description": "Generate PDFs from saved Bitavu visual templates and workflow data",
+	"license": "MIT",
+	"homepage": "https://bitavu.com/support/n8n",
+	"keywords": [
+		"n8n-community-node-package"
+	],
+	"author": {
+		"name": "bitavu.com",
+		"email": "integration+n8n@bitavu.com",
+		"url": "https://bitavu.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitavu/n8n-nodes-bitavu.git"
+	},
+	"scripts": {
+		"prebuild": "npm rebuild typescript --ignore-scripts --offline --no-audit --no-fund",
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"test": "npm run build && node --test tests/*.test.cjs",
+		"typecheck": "node node_modules/typescript/bin/tsc --noEmit --incremental false",
+		"pack:check": "node scripts/check-package.mjs",
+		"vetting:check": "npm run pack:check && node scripts/check-vetting.mjs",
+		"privacy:check": "node scripts/check-privacy.mjs",
+		"publish:artifact": "node scripts/publish-package.mjs",
+		"prepublishOnly": "npm run lint && npm test"
+	},
+	"files": [
+		"dist/credentials/*.js",
+		"dist/nodes/Bitavu/*.js",
+		"dist/nodes/Bitavu/*.json",
+		"dist/nodes/Bitavu/*.svg",
+		"examples/*.json"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/BitavuApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Bitavu/Bitavu.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "0.57.0",
+		"@n8n/scan-community-package": "0.43.0",
+		"@types/node": "22.19.19",
+		"eslint": "9.32.0",
+		"n8n-workflow": "2.46.5",
+		"prettier": "3.6.2",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	},
+	"engines": {
+		"node": ">=22.16"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"bugs": {
+		"url": "https://github.com/bitavu/n8n-nodes-bitavu/issues"
+	}
+}
