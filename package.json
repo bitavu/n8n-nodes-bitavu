@@ -1,11 +1,16 @@
 {
 	"name": "@bitavu/n8n-nodes-bitavu",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Generate PDFs from saved Bitavu visual templates and workflow data",
 	"license": "MIT",
 	"homepage": "https://bitavu.com/support/n8n",
 	"keywords": [
-		"n8n-community-node-package"
+		"n8n-community-node-package",
+		"bitavu",
+		"pdf",
+		"pdf-generation",
+		"invoice",
+		"templates"
 	],
 	"author": {
 		"name": "bitavu.com",

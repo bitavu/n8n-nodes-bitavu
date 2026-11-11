@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Add npm search keywords for Bitavu, PDF generation, invoices, and templates.
+
 ## 0.1.1
 
 - Declare a standard credential test using Bitavu's read-only key-check endpoint.
