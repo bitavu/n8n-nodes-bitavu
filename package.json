@@ -1,7 +1,7 @@
 {
 	"name": "@bitavu/n8n-nodes-bitavu",
-	"version": "0.1.3",
-	"description": "Generate PDFs from saved Bitavu visual templates and workflow data",
+	"version": "0.1.4",
+	"description": "Generate PDFs and work with saved Bitavu templates in n8n",
 	"license": "MIT",
 	"homepage": "https://bitavu.com/support/n8n",
 	"keywords": [
@@ -38,8 +38,8 @@
 	},
 	"files": [
 		"dist/credentials/*.js",
-		"dist/nodes/Bitavu/*.js",
-		"dist/nodes/Bitavu/*.json",
+		"dist/nodes/Bitavu*/*.js",
+		"dist/nodes/Bitavu*/*.node.json",
 		"dist/nodes/Bitavu/*.svg",
 		"examples/*.json"
 	],
@@ -50,7 +50,11 @@
 			"dist/credentials/BitavuApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/Bitavu/Bitavu.node.js"
+			"dist/nodes/Bitavu/Bitavu.node.js",
+			"dist/nodes/BitavuListTemplates/BitavuListTemplates.node.js",
+			"dist/nodes/BitavuListTemplateVersions/BitavuListTemplateVersions.node.js",
+			"dist/nodes/BitavuGetTemplateVersion/BitavuGetTemplateVersion.node.js",
+			"dist/nodes/BitavuSaveTemplateExample/BitavuSaveTemplateExample.node.js"
 		]
 	},
 	"devDependencies": {

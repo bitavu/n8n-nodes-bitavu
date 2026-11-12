@@ -2,10 +2,12 @@
   "node": "@bitavu/n8n-nodes-bitavu.bitavu",
   "nodeVersion": "1.0",
   "codexVersion": "1.0",
+  "alias": ["Bitavu"],
   "categories": [
     "Productivity",
     "Utility",
-    "Finance & Accounting"
+    "Finance & Accounting",
+    "Marketing & Content"
   ],
   "resources": {
     "primaryDocumentation": [

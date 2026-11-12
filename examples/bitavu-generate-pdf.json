@@ -17,18 +17,6 @@
         "assignments": {
           "assignments": [
             {
-              "id": "template",
-              "name": "templateId",
-              "value": "invoice",
-              "type": "string"
-            },
-            {
-              "id": "revision",
-              "name": "revision",
-              "value": 1,
-              "type": "number"
-            },
-            {
               "id": "input",
               "name": "data",
               "value": {
@@ -56,12 +44,6 @@
                 "notes": "Generated with data supplied by n8n. Fictional sample data."
               },
               "type": "object"
-            },
-            {
-              "id": "operation",
-              "name": "operationId",
-              "value": "={{ 'bitavu-n8n-operation-' + $execution.id + '-' + $itemIndex }}",
-              "type": "string"
             }
           ]
         },
@@ -78,7 +60,7 @@
     },
     {
       "id": "generate-pdf",
-      "name": "Generate PDF with Bitavu",
+      "name": "Generate PDF",
       "type": "@bitavu/n8n-nodes-bitavu.bitavu",
       "typeVersion": 1,
       "position": [
@@ -86,14 +68,21 @@
         0
       ],
       "parameters": {
-        "resource": "document",
+        "versionSelection": "pinned",
         "operation": "generate",
-        "templateId": "={{ $json.templateId }}",
-        "revision": "={{ $json.revision }}",
-        "data": "={{ $json.data }}",
-        "options": {
-          "operationId": "={{ $json.operationId }}"
-        }
+        "templateId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "invoice",
+          "cachedResultName": "Studio invoice"
+        },
+        "revision": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1",
+          "cachedResultName": "Version 1"
+        },
+        "data": "={{ $json.data }}"
       }
     }
   ],
@@ -113,7 +102,7 @@
       "main": [
         [
           {
-            "node": "Generate PDF with Bitavu",
+            "node": "Generate PDF",
             "type": "main",
             "index": 0
           }

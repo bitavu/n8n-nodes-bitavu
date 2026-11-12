@@ -27,7 +27,7 @@ export class BitavuApi implements ICredentialType {
 			required: true,
 			default: '',
 			description:
-				'A Bitavu key with Generate PDFs permission for your saved report. Paste only the key, without Bearer.',
+				'A Bitavu key with permission for the selected operation and access to its templates. Paste only the key, without Bearer.',
 		},
 		{
 			displayName: 'Allowed HTTP Request Domains',

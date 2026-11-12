@@ -1,25 +1,31 @@
 # @bitavu/n8n-nodes-bitavu
 
-Generate PDFs from [Bitavu](https://bitavu.com)'s visual templates and data in
-your n8n workflow. Design and test the layout in Studio, save a version, then
-use **Bitavu → Generate PDF**.
+Generate PDFs from [Bitavu](https://bitavu.com)'s visual templates and workflow
+data. Dedicated template nodes list templates, inspect saved versions, and save
+example JSON.
 
 The [HTTP Request guide](https://bitavu.com/support/n8n) remains available for
-n8n Cloud and self-hosted instances. n8n verification of this node is pending.
+n8n Cloud and self-hosted instances.
 
 ## Installation
 
 Self-hosted n8n owners can install `@bitavu/n8n-nodes-bitavu`
 through **Settings → Community nodes → Install**. Follow
 [n8n's installation instructions](https://docs.n8n.io/integrations/community-nodes/installation/).
-n8n Cloud requires a verified community node; this package is not yet verified.
+On n8n Cloud, install an n8n-verified version from the nodes panel.
 
 ## Credentials
 
-Create a **Bitavu API** credential and paste your API key. In Studio's
-**Integrations → API keys**, reuse a suitable active key or create one with
-**Generate PDFs** permission for the report. **Read templates** is not needed.
-Keep the secret in Credentials, never in exported workflow JSON.
+Create a **Bitavu API** credential and paste your API key. Give it access to
+the templates in the workflow and the permission for each operation.
+
+| Operation | Permission |
+| --- | --- |
+| Generate PDF | Generate PDFs |
+| List Templates, List Template Versions, Get Template Version | Read templates |
+| Save Template Example | Save template examples |
+
+Store the key in n8n Credentials.
 
 Credential testing sends an authenticated, read-only `GET /v1/credentials/check`
 request. It does not read reports, generate a PDF or consume render credits.
@@ -32,20 +38,55 @@ and remaining allowance are checked when rendering.
    content to fields, save a version and test it.
 2. Copy **templateId**, numeric **revision** and **data** from **Integrations →
    Prepare a template request → Use in your app**.
-3. Add **Bitavu → Generate PDF** and select your credential.
-4. Set **Template ID**, **Saved Version** and **Document Data**. Map the JSON
+3. Search for **Bitavu**, add **Generate PDF**, and select your credential.
+4. Set **Template**, **Version Selection**, and **Document Data**. Map the JSON
    object using an expression such as `{{ $json.data }}` or `{{ $json }}`.
 5. Execute. Each input item produces a PDF in the **pdf** binary field, ready
    for an email, file-storage or other node accepting binary data.
 
-The node calls `POST https://api.bitavu.com/v1/render`, handles Bearer
-authentication and binary PDF output, and keeps TLS verification enabled.
-It preserves input JSON, existing binary fields and item pairing, and adds
-`bitavu` metadata with the template, version, operation ID and filename.
+Use **Template → From List** to search the templates your key can read, sorted by folder and name. The key
+needs **Read templates** permission for the picker and **Generate PDFs** for the
+render. **By ID** accepts a template ID or an expression and works with a key
+that only has **Generate PDFs** permission.
+
+Choose **Pinned** and select the **Pinned Version** to keep using a tested layout.
+Use **From List** with **Read templates** permission to see saved versions from newest
+to oldest, with the current publication marked **Published**. Use **By Number** to
+enter the saved version directly. Template and version are node settings. The
+incoming data can contain just the document fields.
+Choose **Latest Published** to follow the current publication when its JSON
+contract is compatible. The version field becomes **Base Version**, and carries
+over the version you entered. Leave it empty to compare against the first
+published version. If compatibility fails, review the changes in Studio or pin
+the tested version. Set **Options → Mapping ID** to use a mapping saved in Studio.
+
+The node preserves input JSON, existing binary fields, and item pairing. The
+`bitavu` output includes the requested and rendered revisions, page count,
+request ID, operation ID, and output file information. The rendered revision
+comes from the API when available. A pinned render can fall back to its requested
+revision.
 
 Any saved Bitavu report works when the supplied data matches that version.
 `examples/bitavu-generate-pdf.json` uses fictional data with the starter invoice
 (`invoice`, saved version 1) and contains no credentials.
+
+## Work with templates
+
+Search for **Bitavu** in the nodes panel and add the action you need. Each node
+has its own settings and uses the same **Bitavu API** credential. Results are
+returned under `$json.bitavu`.
+
+| Operation | Result |
+| --- | --- |
+| List Templates | Accessible templates with folder paths, latest saved revisions, and Studio links |
+| List Template Versions | Saved versions with a `published` flag on each row, the current `publishedRevision`, the latest summary, and an optional selected summary |
+| Get Template Version | A saved version with its bindings, example JSON, and missing or unused input paths |
+| Save Template Example | A new saved version with the example JSON and updated input review |
+
+For **Save Template Example**, set **Expected Version** to the latest saved version you
+reviewed. Bitavu rejects the save if that version is no longer current. Read the
+latest version and check its bindings before retrying a conflict or uncertain
+save. Saving an example leaves the current publication in place.
 
 ## Options and retries
 
@@ -60,15 +101,15 @@ new IDs and can consume new credits. For retries across executions, retain a
 unique ID upstream and map it to **Options → Operation ID**. Reusing an ID with
 different data returns a conflict; the node does not hide it by changing the ID.
 
-There are no internal automatic retries. Configure retries in n8n and respect
-`Retry-After` for rate limits. After an uncertain network result, retry with the
-same ID and input. Request timeout: 120 seconds.
+Configure retries in n8n. For an uncertain render result, retry with the same
+operation ID and input. API errors show the request ID and retry delay when
+available. Request timeout is 120 seconds.
 
 ## Errors and privacy
 
-Errors explain invalid keys, missing permissions, template/version/data
-mismatches, operation conflicts and allowance limits. Use n8n error workflows
-or **On Error** settings to handle failures.
+Errors explain invalid keys, missing permissions, compatibility checks,
+revision conflicts, and allowance limits. Use n8n error workflows or
+**On Error** settings to handle failures.
 
 The node does not log keys, document data or PDFs, read files or access
 environment variables. It calls only `api.bitavu.com` and follows no redirects.
@@ -83,9 +124,9 @@ uses `n8n-workflow` 2.46.5, matching the tested n8n 2.46.7 instance.
 
 ```sh
 npm ci --ignore-scripts
-npm test
 npm run lint
 npm run typecheck
+npm test
 npm run vetting:check
 npm run dev
 ```
@@ -100,10 +141,10 @@ execution/node/run/item idempotency together. PDF binary output remains a
 regular workflow result, with AI tool generation disabled. Credentials use
 n8n's standard declarative credential test.
 
-Run the Publish workflow manually on the tag for the package version. Supply
-the SHA-256 of the reviewed tarball. The workflow builds and audits the package,
-then publishes with npm provenance if the tarball matches. Configure npm trusted
-publishing for `bitavu/n8n-nodes-bitavu`, workflow `publish.yml`, environment `npm`.
+The publish workflow builds, tests and publishes `v*.*.*` tags with npm
+provenance. Configure npm trusted publishing for repository
+`bitavu/n8n-nodes-bitavu`, workflow `publish.yml`, environment `npm`.
+The workflow audits the packed files and publishes that exact tarball.
 
 ## License
 

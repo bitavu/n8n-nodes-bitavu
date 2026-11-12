@@ -1,0 +1,17 @@
+{
+  "node": "@bitavu/n8n-nodes-bitavu.bitavuGetTemplateVersion",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "alias": ["Bitavu"],
+  "categories": [
+    "Productivity",
+    "Utility"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://bitavu.com/support/n8n"
+      }
+    ]
+  }
+}

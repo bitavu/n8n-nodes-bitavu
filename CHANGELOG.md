@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.4
+
+- Render pinned or latest-published versions, with an optional compatibility base and saved mapping.
+- Search accessible templates with a key that has Read templates permission.
+- Add dedicated nodes to list templates, list saved versions, read a template version, and save example data.
+- Use action names in the node picker and on the canvas. Search for Bitavu to find all five actions.
+- Sort template pickers by name and version pickers by descending revision, with the current publication marked Published.
+- Identify the current publication in List Template Versions output.
+- Include the rendered revision, page count, and request ID in PDF output, and surface retry guidance for API errors.
+- Add the Marketing & Content category.
+
 ## 0.1.3
 
 - Update the node categories to Productivity, Utility, and Finance & Accounting.
