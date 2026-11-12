@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Update the node categories to Productivity, Utility, and Finance & Accounting.
+
 ## 0.1.2
 
 - Add npm search keywords for Bitavu, PDF generation, invoices, and templates.
